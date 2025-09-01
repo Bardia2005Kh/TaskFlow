@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskFlow.Domain.Models;
+using static TaskFlow.Domain.Models.TaskItem;
 
-namespace TaskFlow.Domain.Models
+namespace TaskFlow.Application.DTOs.TaskItemDTOs
 {
-    public class TaskItem
+    public class TaskItemDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -23,26 +25,5 @@ namespace TaskFlow.Domain.Models
         public User User { get; set; }
         public Category? Category { get; set; }
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-
-
-
-
-
-
-        // Enums
-        public enum Status
-        {
-            Todo = 0,
-            InProgress = 1,
-            Done = 2,
-        }
-
-        public enum Priorty
-        {
-            Low = 0,
-            Medium = 1,
-            High = 2,
-        }
     }
 }

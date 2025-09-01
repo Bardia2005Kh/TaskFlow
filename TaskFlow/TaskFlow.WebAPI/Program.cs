@@ -1,4 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using TaskFlow.Application.AutoMapperProfiles;
+using TaskFlow.Application.IRepository;
 using TaskFlow.Infra.Data;
+using TaskFlow.Infra.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +13,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Injecting DbContext
 builder.Services.AddDbContext<TaskFlowDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ResturantsConnectionString")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+// Injecting Repository Interfaces
+builder.Services.AddScoped<ITaskRepository, TaskItemRepository>();
+
+// Injecting AutoMapper
+builder.Services.AddAutoMapper(typeof(Profiles));
 
 var app = builder.Build();
 
