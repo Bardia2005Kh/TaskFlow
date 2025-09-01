@@ -1,0 +1,2 @@
+# TaskFlow
+ TaskFlow – A full-stack task management application built with modern .NET technologies.  Built using Blazor WebAssembly (frontend), ASP.NET Core Web API, and Clean Architecture, this app features JWT authentication, role-based access, task categorization, real-time comments, and a responsive dashboard.  🏗️ Clean Architecture | 🔐 JWT Auth | 📦 EF Core Code First  Perfect for showcasing full-stack .NET skills, teamwork, and scalable design patterns. 
