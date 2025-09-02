@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +27,49 @@ namespace TaskFlow.Infra.Repository
             var result = await dbContext.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var existingTask = await dbContext.taskItems.FirstOrDefaultAsync(t => t.Id == id);
+            if (existingTask == null)
+            {
+                return false;
+            }
+
+            dbContext.taskItems.Remove(existingTask);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public Task<List<TaskItem>> GetAllAsync()
+        {
+            return dbContext.taskItems.ToListAsync();
+        }
+
+        public async Task<TaskItem?> GetByIdAsync(int id)
+        {
+            return await dbContext.taskItems.FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<TaskItem?> UpdateAsync(int id, TaskItem taskItem)
+        {
+            var existingTask = await dbContext.taskItems.FirstOrDefaultAsync(t => t.Id == id);
+            if (existingTask == null)
+            {
+                return null;
+            }
+
+            existingTask.Title = taskItem.Title;
+            existingTask.Description = taskItem.Description;
+            existingTask.TaskStatus = taskItem.TaskStatus;
+            existingTask.TaskPriorty = taskItem.TaskPriorty;
+            existingTask.UserId = taskItem.UserId;
+            existingTask.CategoryId = taskItem.CategoryId;
+
+            await dbContext.SaveChangesAsync();
+
+            return existingTask;
         }
     }
 }
