@@ -19,6 +19,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 // Injecting Repository Interfaces
 builder.Services.AddScoped<ITaskRepository, TaskItemRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 // Injecting AutoMapper
 builder.Services.AddAutoMapper(typeof(Profiles));

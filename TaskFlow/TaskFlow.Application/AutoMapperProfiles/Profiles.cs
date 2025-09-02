@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskFlow.Application.DTOs.CategoryDTOs;
+using TaskFlow.Application.DTOs.CommentDTOs;
 using TaskFlow.Application.DTOs.TaskItemDTOs;
 using TaskFlow.Domain.Models;
 
@@ -22,6 +23,12 @@ namespace TaskFlow.Application.AutoMapperProfiles
             // Categories Mapping Profiles
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, AddCategoryDto>().ReverseMap();
+            CreateMap<Category, UpdateCategoryDto>().ReverseMap();
+
+            // Comments Mapping Profiles
+            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Comment, AddCommentRequestDto>().ReverseMap();
+            CreateMap<Comment, UpdateCommentRequestDto>().ReverseMap();
 
         }
     }

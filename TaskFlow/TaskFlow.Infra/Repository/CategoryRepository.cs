@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,47 @@ namespace TaskFlow.Infra.Repository
         public async Task<bool> CreateAsync(Category category)
         {
             await dbContext.categories.AddAsync(category);
+            var result = await dbContext.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var existingCategory = await dbContext.categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (existingCategory == null)
+            {
+                return false;
+            }
+
+            dbContext.categories.Remove(existingCategory);
+            var result = await dbContext.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<List<Category>> GetAllAsync()
+        {
+            return await dbContext.categories.ToListAsync();
+        }
+
+        public async Task<Category?> GetByIdAsync(int id)
+        {
+            return await dbContext.categories.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<bool> UpdateAsync(int id, Category category)
+        {
+            var existingCategory = await dbContext.categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (existingCategory == null)
+            {
+                return false;
+            }
+
+            existingCategory.Name = category.Name;
+            existingCategory.Color = category.Color;
+            existingCategory.UserId = category.UserId;
+
             var result = await dbContext.SaveChangesAsync();
 
             return result > 0;

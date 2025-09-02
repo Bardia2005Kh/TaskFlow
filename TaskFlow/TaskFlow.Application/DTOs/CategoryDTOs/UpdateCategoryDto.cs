@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace TaskFlow.Application.DTOs.CategoryDTOs
 {
-    internal class UpdateCategoryDto
+    public class UpdateCategoryDto
     {
+        public string Name { get; set; }
+        public string Color { get; set; } = "#007BFF";
+
+        // Foreign Keys 
+        public int UserId { get; set; }
     }
 }
