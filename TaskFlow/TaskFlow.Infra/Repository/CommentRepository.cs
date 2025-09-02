@@ -26,6 +26,20 @@ namespace TaskFlow.Infra.Repository
             return result > 0;
         }
 
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var existingComment = await dbContext.comments.FirstOrDefaultAsync(c => c.Id == id);
+            if (existingComment == null)
+            {
+                return false;
+            }
+
+            dbContext.comments.Remove(existingComment);
+            var result = await dbContext.SaveChangesAsync();
+
+            return result > 0;
+        }
+
         public async Task<List<Comment>> GetAllAsync()
         {
             return await dbContext.comments.ToListAsync();
@@ -44,7 +58,13 @@ namespace TaskFlow.Infra.Repository
                 return false;
             }
 
-            existingComment.Content
+            existingComment.Content = comment.Content;
+            existingComment.TaskItemId = comment.TaskItemId;
+            existingComment.UserId = comment.UserId;
+
+            var result = await dbContext.SaveChangesAsync();
+
+            return result > 0;
         }
     }
 }
