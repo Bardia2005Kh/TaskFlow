@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TaskFlow.Application.AutoMapperProfiles;
 using TaskFlow.Application.IRepository;
 using TaskFlow.Infra.Data;
@@ -17,10 +20,27 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TaskFlowDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AppSettings:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+            ValidateIssuerSigningKey = true
+        };
+    });
+
 // Injecting Repository Interfaces
 builder.Services.AddScoped<ITaskRepository, TaskItemRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 // Injecting AutoMapper
 builder.Services.AddAutoMapper(typeof(Profiles));
@@ -35,6 +55,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -56,7 +56,7 @@ namespace TaskFlow.WebAPI.Controllers
         }
 
         // Get a comment by its ID
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             // Retrieve comment by ID
