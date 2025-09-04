@@ -11,6 +11,7 @@ namespace TaskFlow.Application.IRepository
     public interface IAuthRepository
     {
         Task<User?> RegisterAsync(AddUserRequest addUserRequest);
+        Task<User?> AdminRegisterAsync(AddUserRequest addUserRequest);
         Task<string?> LoginAsync(LoginRequestDto loginRequest);
     }
 }

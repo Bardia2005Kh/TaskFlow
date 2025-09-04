@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskFlow.Infra.Data;
 
@@ -11,9 +12,11 @@ using TaskFlow.Infra.Data;
 namespace TaskFlow.Infra.Migrations
 {
     [DbContext(typeof(TaskFlowDbContext))]
-    partial class TaskFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250904134608_AddUserRoleToUser")]
+    partial class AddUserRoleToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,18 +154,6 @@ namespace TaskFlow.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 9, 4, 17, 53, 22, 758, DateTimeKind.Local).AddTicks(5886),
-                            Email = "Admin@gmail.com",
-                            FirstName = "Admin",
-                            LastName = "Adminian",
-                            PasswordHash = "$2a$11$Lbq4IcZWCQdEhf3WKBr2fu6ezbwESU3TOTWgoN1w6LDfFrp.YmFli",
-                            UserRole = 1
-                        });
                 });
 
             modelBuilder.Entity("TaskFlow.Domain.Models.Category", b =>

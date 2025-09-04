@@ -46,6 +46,21 @@ namespace TaskFlow.Infra.Data
                 .HasForeignKey(i => i.UserId)
                 .IsRequired();
 
+            // Seed Admin User
+            var adminPassword = BCrypt.Net.BCrypt.HashPassword("Admin@123");
+            var adminUser = new User
+            {
+                Id = 1,
+                FirstName = "Admin",
+                LastName = "Adminian", // Typical Iraninan last name :D
+                Email = "Admin@gmail.com",
+                PasswordHash = adminPassword,
+                CreatedAt = DateTime.Now,
+                UserRole = (User.Role)1
+            };
+
+            modelBuilder.Entity<User>().HasData(adminUser);
+
 
         }
     }

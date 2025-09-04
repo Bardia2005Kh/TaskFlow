@@ -16,8 +16,19 @@ namespace TaskFlow.WebAPI.Controllers
             this.authRepository = authRepository;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AddUserRequest addUserRequest)
+        [HttpPost("user/register")]
+        public async Task<IActionResult> UserRegister([FromBody] AddUserRequest addUserRequest)
+        {
+            var user = await authRepository.RegisterAsync(addUserRequest);
+            if (user == null)
+            {
+                return BadRequest("User already exists or registration failed.");
+            }
+            return Ok(user);
+        }
+
+        [HttpPost("admin/register")]
+        public async Task<IActionResult> AdminRegister([FromBody] AddUserRequest addUserRequest)
         {
             var user = await authRepository.RegisterAsync(addUserRequest);
             if (user == null)

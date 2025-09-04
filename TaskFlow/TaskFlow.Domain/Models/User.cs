@@ -14,10 +14,18 @@ namespace TaskFlow.Domain.Models
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public Role UserRole { get; set; } = Role.User;
 
         // Navigate
         public ICollection<Category> Categories { get; set; } = new List<Category>();
         public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+        // ENUMs
+        public enum Role
+        {
+            User = 0,
+            Admin = 1,
+        }
     }
 }

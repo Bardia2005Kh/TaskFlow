@@ -45,6 +45,32 @@ namespace TaskFlow.Infra.Repository
             return CreateToken(user);
         }
 
+        public async Task<User?> AdminRegisterAsync(AddUserRequest addUserRequest)
+        {
+            // Check if user already exists
+            var exists = await dbContext.users.AnyAsync(u => u.Email == addUserRequest.Email);
+            if (exists)
+                return null;
+
+            // Hash password
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(addUserRequest.Password);
+
+            var user = new User
+            {
+                FirstName = addUserRequest.FirstName,
+                LastName = addUserRequest.LastName,
+                Email = addUserRequest.Email,
+                PasswordHash = passwordHash,
+                CreatedAt = DateTime.Now,
+                UserRole = (User.Role)1 // Default to User role
+            };
+
+            await dbContext.users.AddAsync(user);
+            await dbContext.SaveChangesAsync();
+
+            return user;
+        }
+
         // Register: create new user with hashed password
         public async Task<User?> RegisterAsync(AddUserRequest addUserRequest)
         {
@@ -62,7 +88,8 @@ namespace TaskFlow.Infra.Repository
                 LastName = addUserRequest.LastName,
                 Email = addUserRequest.Email,
                 PasswordHash = passwordHash,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                UserRole = 0 // Default to User role
             };
 
             await dbContext.users.AddAsync(user);
@@ -74,23 +101,22 @@ namespace TaskFlow.Infra.Repository
         private string CreateToken(User user)
         {
             var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Email),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        //new Claim(ClaimTypes.Role, user.Role)
-                    };
+            {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.UserRole.ToString()) // Add role claim
+            };
 
-            var tokenKey = configuration["AppSettings:Token"]; // Use indexer instead of GetValue
+            var tokenKey = configuration["AppSettings:Token"];
             if (string.IsNullOrEmpty(tokenKey))
                 throw new InvalidOperationException("Token key is not configured.");
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
-
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             var tokenDescriptor = new JwtSecurityToken(
-                issuer: configuration["AppSettings:Issuer"], // Use indexer instead of GetValue
-                audience: configuration["AppSettings:Audience"], // Use indexer instead of GetValue
+                issuer: configuration["AppSettings:Issuer"],
+                audience: configuration["AppSettings:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds
