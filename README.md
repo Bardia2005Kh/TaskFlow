@@ -13,28 +13,33 @@ The architecture follows best practices for maintainability and scalability.
 ---
 
 ## 🚀 Main Features  
-- **CRUD Operations:** Endpoints for creating, retrieving (single and all), updating, and deleting.  
-- **DTOs:** Uses Data Transfer Objects for input and output to keep API contracts clean.  
-- **Repository Pattern:** Data access is abstracted via interfaces and implemented in a separate infrastructure layer.  
-- **AutoMapper:** Used for mapping between domain models and DTOs.
+- **Authentication & Authorization:** Secure login/register with JWT, role-based access (Admin/User).
+- **CRUD Operations:** Endpoints for creating, retrieving, updating, and deleting tasks, categories, and comments.
+- **User Management:** Register, login, and seed admin user.
+- **DTOs:** Clean API contracts using Data Transfer Objects.
+- **Repository Pattern:** Abstracted data access via interfaces and infrastructure layer.
+- **AutoMapper:** Mapping between domain models and DTOs.
+- **EF Core Migrations:** Code-first database management and seeding.
+- **Swagger/OpenAPI:** Interactive API documentation.
+- **Role-Based Access:** Restrict endpoints to specific roles.
   
 ---
 
 ## 📂 Project Structure  
-- **TaskFlow.WebAPI:** Contains controllers and startup configuration.  
-- **TaskFlow.Application:** Contains DTOs, repository interfaces, and AutoMapper profiles.  
-- **TaskFlow.Domain:** Contains domain models.  
-- **TaskFlow.Infra:** Contains repository implementations, Migrations and DbContext.  
-
+- **TaskFlow.WebAPI:** Controllers, authentication, and startup configuration.
+- **TaskFlow.Application:** DTOs, repository interfaces, and AutoMapper profiles.
+- **TaskFlow.Domain:** Domain models (User, TaskItem, Category, Comment).
+- **TaskFlow.Infra:** Repository implementations, migrations, and DbContext.
 ---
 
 ## 🛠️ Technologies Used  
-- **ASP.NET Core (.NET 8)**  
-- **C# 12**  
-- **Entity Framework Core (Code First)**  
-- **SQL Server**  
-- **AutoMapper**  
-- **DTOs for clean API contracts**  
+- ASP.NET Core (.NET 8)
+- C# 12
+- Entity Framework Core (Code First)
+- SQL Server
+- AutoMapper
+- JWT Authentication
+- Swagger/OpenAPI
 
 ---
 
@@ -59,12 +64,12 @@ The architecture follows best practices for maintainability and scalability.
 ---
 
 ## 📌 Extensibility  
-- 🔐 Authentication & Authorization (JWT)  
-- 📊 Logging & Monitoring  
-- ✅ Input Validation  
-- 📖 API Documentation with Swagger/OpenAPI  
-- ⚡ Pagination & Filtering for tasks 
-- 🧪 Unit & Integration Tests  
+- 🔐 Role-based Authentication & Authorization (JWT)
+- 📊 Logging & Monitoring (planned)
+- ✅ Input Validation
+- 📖 API Documentation with Swagger/OpenAPI
+- ⚡ Pagination & Filtering for tasks (planned)
+- 🧪 Unit & Integration Tests (planned)  
 
 ---
 
