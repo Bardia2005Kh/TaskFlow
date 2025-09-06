@@ -5,6 +5,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using TaskFlow.Application.AutoMapperProfiles;
 using TaskFlow.Application.IRepository;
+using TaskFlow.Application.IServices;
+using TaskFlow.Application.Services;
 using TaskFlow.Infra.Data;
 using TaskFlow.Infra.Repository;
 
@@ -70,6 +72,9 @@ builder.Services.AddScoped<ITaskRepository, TaskItemRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+// Injecting Service Interfaces
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 // Injecting AutoMapper
 builder.Services.AddAutoMapper(typeof(Profiles));

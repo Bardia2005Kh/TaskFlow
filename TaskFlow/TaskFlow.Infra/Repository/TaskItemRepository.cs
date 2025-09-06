@@ -52,24 +52,12 @@ namespace TaskFlow.Infra.Repository
             return await dbContext.taskItems.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<TaskItem?> UpdateAsync(int id, TaskItem taskItem)
+        public async Task<bool> UpdateAsync(TaskItem taskItem)
         {
-            var existingTask = await dbContext.taskItems.FirstOrDefaultAsync(t => t.Id == id);
-            if (existingTask == null)
-            {
-                return null;
-            }
+            dbContext.taskItems.Update(taskItem);
+            var result = await dbContext.SaveChangesAsync();
 
-            existingTask.Title = taskItem.Title;
-            existingTask.Description = taskItem.Description;
-            existingTask.TaskStatus = taskItem.TaskStatus;
-            existingTask.TaskPriorty = taskItem.TaskPriorty;
-            existingTask.UserId = taskItem.UserId;
-            existingTask.CategoryId = taskItem.CategoryId;
-
-            await dbContext.SaveChangesAsync();
-
-            return existingTask;
+            return result > 0;
         }
     }
 }
