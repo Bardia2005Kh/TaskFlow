@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs.CommentDTOs;
 using TaskFlow.Application.IRepository;
+using TaskFlow.Application.IServices;
 using TaskFlow.Domain.Models;
 
 namespace TaskFlow.WebAPI.Controllers
@@ -12,14 +13,16 @@ namespace TaskFlow.WebAPI.Controllers
     [ApiController]
     public class CommentsController : ControllerBase
     {
-        // Repository for comment data access
+        private readonly ICommentService commentService;
+
+        
         private readonly ICommentRepository commentRepository;
-        // Mapper for converting between DTOs and domain models
         private readonly IMapper mapper;
 
         // Constructor injects repository and mapper dependencies
-        public CommentsController(ICommentRepository commentRepository, IMapper mapper)
+        public CommentsController(ICommentService commentService, ICommentRepository commentRepository, IMapper mapper)
         {
+            this.commentService = commentService;
             this.commentRepository = commentRepository;
             this.mapper = mapper;
         }
@@ -28,14 +31,10 @@ namespace TaskFlow.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddCommentRequestDto addCommentRequestDto)
         {
-            // Map DTO to domain model
-            var commentDomain = mapper.Map<Comment>(addCommentRequestDto);
-
             // Save comment to database
-            var creationResult = await commentRepository.CreateAsync(commentDomain);
-            if (creationResult == false)
+            var creationResult = await commentService.CreateService(addCommentRequestDto);
+            if (creationResult == null)
             {
-                // Return error if creation failed
                 return BadRequest();
             }
 
