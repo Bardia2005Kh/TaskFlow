@@ -26,15 +26,9 @@ namespace TaskFlow.Infra.Repository
             return result > 0;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Comment comment)
         {
-            var existingComment = await dbContext.comments.FirstOrDefaultAsync(c => c.Id == id);
-            if (existingComment == null)
-            {
-                return false;
-            }
-
-            dbContext.comments.Remove(existingComment);
+            dbContext.comments.Remove(comment);
             var result = await dbContext.SaveChangesAsync();
 
             return result > 0;
@@ -52,16 +46,7 @@ namespace TaskFlow.Infra.Repository
 
         public async Task<bool> UpdateAsync(int id, Comment comment)
         {
-            var existingComment = await dbContext.comments.FirstOrDefaultAsync(c => c.Id == id);
-            if (existingComment == null)
-            {
-                return false;
-            }
-
-            existingComment.Content = comment.Content;
-            existingComment.TaskItemId = comment.TaskItemId;
-            existingComment.UserId = comment.UserId;
-
+            dbContext.comments.Update(comment);
             var result = await dbContext.SaveChangesAsync();
 
             return result > 0;

@@ -13,6 +13,6 @@ namespace TaskFlow.Application.IRepository
         Task<List<Comment>> GetAllAsync();
         Task<Comment?> GetByIdAsync(int id);
         Task<bool> UpdateAsync(int id, Comment comment);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(Comment comment);
     }
 }

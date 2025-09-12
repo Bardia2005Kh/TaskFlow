@@ -35,5 +35,60 @@ namespace TaskFlow.Application.Services
 
             return commentDto;
         }
+
+        public async Task<bool> DeleteService(int id)
+        {
+            var existingComment = await commentRepository.GetByIdAsync(id);
+            if (existingComment == null)
+            {
+                return false;
+            }
+
+            var DeleteCommentResult = await commentRepository.DeleteAsync(existingComment);
+            if (DeleteCommentResult == false)
+            {
+                throw new Exception("Can not delete this comment");
+            }
+             return true;
+        }
+
+        public async Task<List<CommentDto>> GetAllService()
+        {
+            var commentsDomain = await commentRepository.GetAllAsync();
+
+            var commentsDto = mapper.Map<List<CommentDto>>(commentsDomain);
+
+            return commentsDto;
+        }
+
+        public async Task<CommentDto?> GetByIdService(int id)
+        {
+            var commentDomain = await commentRepository.GetByIdAsync(id);
+            if (commentDomain == null)
+            {
+                return null;
+            }
+
+            var commentDto = mapper.Map<CommentDto>(commentDomain);
+            return commentDto;
+        }
+
+        public async Task<bool> UpdateService(int id, UpdateCommentRequestDto updateCommentRequestDto)
+        {
+            var existingComment = await commentRepository.GetByIdAsync(id);
+            if (existingComment == null)
+            {
+                return false;
+            }
+
+            existingComment.Content = updateCommentRequestDto.Content;
+            var updateResult = await commentRepository.UpdateAsync(id, existingComment);
+            if (updateResult == false)
+            {
+                throw new Exception("Update faild!");
+            }
+
+            return true;
+        }
     }
 }

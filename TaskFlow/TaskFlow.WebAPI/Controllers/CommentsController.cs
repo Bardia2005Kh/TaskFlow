@@ -14,16 +14,12 @@ namespace TaskFlow.WebAPI.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService commentService;
-
-        
-        private readonly ICommentRepository commentRepository;
         private readonly IMapper mapper;
 
         // Constructor injects repository and mapper dependencies
-        public CommentsController(ICommentService commentService, ICommentRepository commentRepository, IMapper mapper)
+        public CommentsController(ICommentService commentService, IMapper mapper)
         {
             this.commentService = commentService;
-            this.commentRepository = commentRepository;
             this.mapper = mapper;
         }
 
@@ -35,7 +31,7 @@ namespace TaskFlow.WebAPI.Controllers
             var creationResult = await commentService.CreateService(addCommentRequestDto);
             if (creationResult == null)
             {
-                return BadRequest();
+                return BadRequest("Commention faild!");
             }
 
             return Ok();
@@ -45,11 +41,7 @@ namespace TaskFlow.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            // Retrieve all comments from database
-            var commentsDomain = await commentRepository.GetAllAsync();
-
-            // Map domain models to DTOs
-            var commentsDto = mapper.Map<List<CommentDto>>(commentsDomain);
+            var commentsDto = await commentService.GetAllService();
 
             return Ok(commentsDto);
         }
@@ -59,15 +51,12 @@ namespace TaskFlow.WebAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             // Retrieve comment by ID
-            var commentDomain = await commentRepository.GetByIdAsync(id);
-            if (commentDomain == null)
+            var commentDto = await commentService.GetByIdService(id);
+            if (commentDto == null)
             {
                 // Return 404 if not found
                 return NotFound();
             }
-
-            // Map domain model to DTO
-            var commentDto = mapper.Map<CommentDto>(commentDomain);
 
             return Ok(commentDto);
         }
@@ -77,11 +66,7 @@ namespace TaskFlow.WebAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateCommentRequestDto)
         {
-            // Map DTO to domain model
-            var commentDomain = mapper.Map<Comment>(updateCommentRequestDto);
-
-            // Update comment in database
-            var updateResult = await commentRepository.UpdateAsync(id, commentDomain);
+            var updateResult = await commentService.UpdateService(id, updateCommentRequestDto);
             if (updateResult == false)
             {
                 // Return 404 if update failed
@@ -97,14 +82,14 @@ namespace TaskFlow.WebAPI.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             // Delete comment from database
-            var DeleteResult = await commentRepository.DeleteAsync(id);
+            var DeleteResult = await commentService.DeleteService(id);
             if (DeleteResult == false)
             {
                 // Return 404 if delete failed
                 return NotFound();
             }
 
-            return Ok();
+            return Ok("Comment's deleted!");
         }
     }
 }
