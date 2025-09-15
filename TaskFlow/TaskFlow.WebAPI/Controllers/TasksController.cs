@@ -13,14 +13,11 @@ namespace TaskFlow.WebAPI.Controllers
     public class TasksController : ControllerBase
     {
         private readonly ITaskService taskService;
-        private readonly ITaskRepository taskRepository;
-        private readonly IMapper mapper;
+        
 
-        public TasksController(ITaskService taskService, ITaskRepository taskRepository, IMapper mapper)
+        public TasksController(ITaskService taskService)
         {
             this.taskService = taskService;
-            this.taskRepository = taskRepository;
-            this.mapper = mapper;
         }
 
         [HttpPost]
@@ -69,9 +66,7 @@ namespace TaskFlow.WebAPI.Controllers
                 return NotFound();
             }
 
-            var taskItemDto = mapper.Map<TaskItemDto>(updationResult);
-
-            return Ok(taskItemDto);
+            return Ok(updationResult);
         }
 
         [HttpDelete]

@@ -14,13 +14,11 @@ namespace TaskFlow.WebAPI.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService commentService;
-        private readonly IMapper mapper;
 
         // Constructor injects repository and mapper dependencies
-        public CommentsController(ICommentService commentService, IMapper mapper)
+        public CommentsController(ICommentService commentService)
         {
             this.commentService = commentService;
-            this.mapper = mapper;
         }
 
         // Create a new comment
