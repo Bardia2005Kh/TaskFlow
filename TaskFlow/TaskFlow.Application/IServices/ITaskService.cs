@@ -12,7 +12,9 @@ namespace TaskFlow.Application.IServices
     {
         Task<bool> CreateService(AddTaskRequestDto addTaskRequestDto);
         Task<List<TaskItemDto>> GetAllService();
-
         Task<TaskItemDto?> UpdateService(int id, UpdateTaskRequest updateTaskRequest);
+        Task<TaskItemDto?> GetByIdService(int id);
+        Task<bool> DeleteService(int id);
+
     }
 }

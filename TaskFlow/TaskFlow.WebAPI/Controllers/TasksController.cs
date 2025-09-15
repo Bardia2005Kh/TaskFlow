@@ -42,13 +42,11 @@ namespace TaskFlow.WebAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var taskItemDomain = await taskRepository.GetByIdAsync(id);
-            if (taskItemDomain == null)
+            var taskItemDto = await taskService.GetByIdService(id);
+            if (taskItemDto == null)
             {
                 return NotFound();
             }
-
-            var taskItemDto = mapper.Map<TaskItemDto>(taskItemDomain);
 
             return Ok(taskItemDto);
         }
@@ -80,13 +78,13 @@ namespace TaskFlow.WebAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await taskRepository.DeleteAsync(id);
+            var result = await taskService.DeleteService(id);
             if (result == false)
             {
                 return NotFound();
             }
 
-            return Ok();
+            return Ok("Task deleted!");
         }
     }
 }

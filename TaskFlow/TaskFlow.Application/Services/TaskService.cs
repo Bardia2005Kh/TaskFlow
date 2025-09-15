@@ -32,6 +32,17 @@ namespace TaskFlow.Application.Services
             return creationResult;
         }
 
+        public async Task<bool> DeleteService(int id)
+        {
+            var deletionResult = await taskRepository.DeleteAsync(id);
+            if (deletionResult == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<List<TaskItemDto>> GetAllService()
         {
             var tasksDomain = await taskRepository.GetAllAsync();
@@ -39,6 +50,18 @@ namespace TaskFlow.Application.Services
             var tasksDto = mapper.Map<List<TaskItemDto>>(tasksDomain);
 
             return tasksDto;
+        }
+
+        public async Task<TaskItemDto?> GetByIdService(int id)
+        {
+            var taskItemDomain = await taskRepository.GetByIdAsync(id);
+            if (taskItemDomain == null)
+            {
+                return null;
+            }
+
+            var taskItemDto = mapper.Map<TaskItemDto>(taskItemDomain);
+            return taskItemDto;
         }
 
         public async Task<TaskItemDto?> UpdateService(int id, UpdateTaskRequest updateTaskRequest)
