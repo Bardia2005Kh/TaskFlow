@@ -26,15 +26,9 @@ namespace TaskFlow.Infra.Repository
             return result > 0;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Category category)
         {
-            var existingCategory = await dbContext.categories.FirstOrDefaultAsync(c => c.Id == id);
-            if (existingCategory == null)
-            {
-                return false;
-            }
-
-            dbContext.categories.Remove(existingCategory);
+            dbContext.categories.Remove(category);
             var result = await dbContext.SaveChangesAsync();
 
             return result > 0;
@@ -50,18 +44,9 @@ namespace TaskFlow.Infra.Repository
             return await dbContext.categories.FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<bool> UpdateAsync(int id, Category category)
+        public async Task<bool> UpdateAsync(Category category)
         {
-            var existingCategory = await dbContext.categories.FirstOrDefaultAsync(c => c.Id == id);
-            if (existingCategory == null)
-            {
-                return false;
-            }
-
-            existingCategory.Name = category.Name;
-            existingCategory.Color = category.Color;
-            existingCategory.UserId = category.UserId;
-
+            dbContext.categories.Update(category);
             var result = await dbContext.SaveChangesAsync();
 
             return result > 0;

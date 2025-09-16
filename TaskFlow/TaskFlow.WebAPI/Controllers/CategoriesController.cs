@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs.CategoryDTOs;
 using TaskFlow.Application.IRepository;
+using TaskFlow.Application.IServices;
 using TaskFlow.Domain.Models;
 
 namespace TaskFlow.WebAPI.Controllers
@@ -11,20 +12,17 @@ namespace TaskFlow.WebAPI.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryRepository categoryRepository;
-        private readonly IMapper mapper;
+        private readonly ICategoryService categoryService;
 
-        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoriesController(ICategoryService categoryService)
         {
-            this.categoryRepository = categoryRepository;
-            this.mapper = mapper;
+            this.categoryService = categoryService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddCategoryDto addCategoryDto)
         {
-            var categoryDomain = mapper.Map<Category>(addCategoryDto);
-            var creationResult = await categoryRepository.CreateAsync(categoryDomain);
+            var creationResult = await categoryService.CreateService(addCategoryDto);
             if (creationResult == false)
             {
                 return BadRequest();
@@ -36,9 +34,7 @@ namespace TaskFlow.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var categoryDomain = await categoryRepository.GetAllAsync();
-
-            var categoryDto = mapper.Map<List<CategoryDto>>(categoryDomain);
+            var categoryDto = await categoryService.GetAllService();
 
             return Ok(categoryDto);
         }
@@ -47,13 +43,12 @@ namespace TaskFlow.WebAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var categoryDomain = await categoryRepository.GetByIdAsync(id);
-            if (categoryDomain == null)
+            var categoryDto = await categoryService.GetByIdService(id);
+            if (categoryDto == null)
             {
-                return NotFound();
+                return NotFound("Cant find your category :/");
             }
 
-            var categoryDto = mapper.Map<CategoryDto>(categoryDomain);
             return Ok(categoryDto);
         }
 
@@ -61,27 +56,26 @@ namespace TaskFlow.WebAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdateCategoryDto updateCategoryDto)
         {
-            var categoryDomain = mapper.Map<Category>(updateCategoryDto);
-            var updateResult = await categoryRepository.UpdateAsync(id, categoryDomain);
+            var updateResult = await categoryService.UpdateService(id, updateCategoryDto);
             if (updateResult == false)
             {
-                return NotFound();
+                return NotFound("Cant find your category :/");
             }
 
-            return Ok();
+            return Ok("category successfully updated!");
         }
 
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var deleteResult = await categoryRepository.DeleteAsync(id);
+            var deleteResult = await categoryService.DeleteService(id);
             if (deleteResult == false)
             {
                 return NotFound();
             }
 
-            return Ok();
+            return Ok("category successfully deleted!");
         }
     }
 }

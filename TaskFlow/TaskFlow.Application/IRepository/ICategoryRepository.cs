@@ -12,7 +12,7 @@ namespace TaskFlow.Application.IRepository
         Task<bool> CreateAsync(Category category);
         Task<List<Category>> GetAllAsync();
         Task<Category?> GetByIdAsync(int id);
-        Task<bool> UpdateAsync(int id, Category category);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> UpdateAsync(Category category);
+        Task<bool> DeleteAsync(Category category);
     }
 }
