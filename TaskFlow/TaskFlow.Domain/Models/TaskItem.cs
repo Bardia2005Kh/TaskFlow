@@ -14,6 +14,7 @@ namespace TaskFlow.Domain.Models
         public Status TaskStatus { get; set; } = Status.Todo;
         public Priorty TaskPriorty { get; set; } = Priorty.Medium;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? DeadLineDate { get; set; }
 
         // Foreign Keys
         public int UserId { get; set; }
@@ -36,6 +37,7 @@ namespace TaskFlow.Domain.Models
             Todo = 0,
             InProgress = 1,
             Done = 2,
+            OverDue = 3,
         }
 
         public enum Priorty

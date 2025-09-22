@@ -14,5 +14,7 @@ namespace TaskFlow.Application.IRepository
         Task<List<TaskItem>> GetAllAsync();
         Task<bool> UpdateAsync(TaskItem taskItem);
         Task<bool> DeleteAsync(int id);
+        Task<List<TaskItem>> GetOverdueOpenTasksAsync(DateTime correntTime);
+        Task SaveChangesAsync();
     }
 }
