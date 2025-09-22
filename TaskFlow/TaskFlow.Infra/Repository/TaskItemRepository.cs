@@ -52,6 +52,18 @@ namespace TaskFlow.Infra.Repository
             return await dbContext.taskItems.FirstOrDefaultAsync(t => t.Id == id);
         }
 
+        public async Task<List<TaskItem>> GetOverdueOpenTasksAsync(DateTime correntTime)
+        {
+            var overDueTasks = await dbContext.taskItems.Where(t => t.DeadLineDate.HasValue && t.DeadLineDate <= correntTime && t.TaskStatus != TaskItem.Status.Done).ToListAsync();
+
+            return overDueTasks;
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<bool> UpdateAsync(TaskItem taskItem)
         {
             dbContext.taskItems.Update(taskItem);

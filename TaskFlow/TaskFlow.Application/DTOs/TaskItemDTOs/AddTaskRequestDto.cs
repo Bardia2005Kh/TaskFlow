@@ -16,6 +16,7 @@ namespace TaskFlow.Application.DTOs.TaskItemDTOs
         public Status TaskStatus { get; set; } = Status.Todo;
         public Priorty TaskPriorty { get; set; } = Priorty.Medium;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? DeadLineDate { get; set; }
 
         // Foreign Keys
         public int UserId { get; set; }

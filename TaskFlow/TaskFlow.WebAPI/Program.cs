@@ -9,6 +9,7 @@ using TaskFlow.Application.IServices;
 using TaskFlow.Application.Services;
 using TaskFlow.Infra.Data;
 using TaskFlow.Infra.Repository;
+using TaskFlow.WebAPI.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +76,9 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 // Injecting Service Interfaces
 builder.Services.AddScoped<ITaskService, TaskService>();
+
+// Injecting BackgroundServices
+builder.Services.AddHostedService<AutoDeadlineChecherService>();
 
 // Injecting AutoMapper
 builder.Services.AddAutoMapper(typeof(Profiles));
